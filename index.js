@@ -2,62 +2,95 @@ const express = require('express') // Importamos express desde node_modules
 const server = express() // Lo invocamos y lo guardamos en una variable
 const port = 3000
 
+// middleware para aceptar jsons
+// 1. instalar con npm install body-parser
+const bodyParser = require("body-parser");
+server.use(bodyParser.urlencoded({ extended: true, limit: "50mb"}));
+server.use(bodyParser.json({limit: "50mb" }));
 
-// => EJEMPLO DE RUTA GET AL ENDPOINT / 
-/*server.get('/', (req, res) => {
-  res.send("Hola perritos, na' mentiras enamorao' pues wevon jsjsjsjs")
-})
-
-server.get("/ejemplo", (req, res) => {
-    res.send("Estoy en la ruta de ejemplo, ademas, enamorao' de Sarah-Jade Bleau")
-})
-
-server.post("/ejemplo", (req, res) => {
-  res.send("Estoy en la ruta de ejemplo, ademas, enamorao' de Sarah-Jade Bleau")
-})
-
-server.listen(port, () => {
-  console.log(`Example server listening on port ${port}`)
-})*/
+let marketProducts = [
+  {
+    id: 1,
+    name: "Lamborgini",
+    color: "red",
+    price: 250,
+    stock: 22
+  },
+  {
+    id: 2,
+    name: "Bugatti Chiron",
+    color: "black",
+    price: 400,
+    stock: 18
+  },
+  {
+    id: 3,
+    name: "Jeep",
+    color: "black",
+    price: 180,
+    stock: 40
+  },
+]
 
 server.get('/product', (req, res) => {
-  // QUERY - peticion req.query
-  // Como armar un query => luego del endpoint agregar ?clave=valor&clave=valor
-  //let query = req.query
-  let order = req.query.order;
-  if (order === "asc") {
-    console.log("Envio resultados ordenados ascendentes");
-  } /*else if (order === "desc") {
-    console.log("Envio resultados descendentes");
-  } else {
-    console.log("Envio resultados desordenados");
-  }*/
+  // 1. Filtrar por query los colores
+  // 2. Filtrar por query los precio
+  // 3. Filtrar por query los stock
 
-  //console.log("Esta ruta me traeria todos los productos segun filtro", order);
-  //console.log("Que es QUERY?", query);
-  res.send("Hello GET!!");
+  try {
+    if (color) {
+      let productFound = marketProducts.filter((car) => car.color === color)
+      //console.log(productFound);
+      res.status(220).json(productFound)
+    } else if (maxPrice) {
+      let productFound = marketProducts.filter((car) => car.price <= maxPrice)
+      //console.log(productFound);
+      res.status(220).json(productFound)
+    } else if (stock){
+      let productFound = marketProducts.filter((car) => car.stock >= stock)
+      //console.log(productFound);
+      res.status(220).json(productFound)
+    } else {
+      //console.log(marketProducts);
+      res.status(220).json(marketProductsssss)
+    }
+  } catch (error) {
+    res.status(400).json("Error en el try de /products")
+  }
+
+  let color = req.query.color;
+  let maxPrice = req.query.maxPrice;
+  let stock = req.query.stock;
+  //res.send(marketProducts);
 });
 
 // PARAMS Peticion de req.param
-server.get('/product/:producto', (req, res) => {
-  //let category = req.params.categoria;
-  //let product = req.params.producto
-  //let params = req.params;
-  let producto = req.params.producto; // => Number (req.params.producto)
-  // con destructuring
-  //let {producto, categoria} = req.params
+server.get('/product/:id', (req, res) => {
+  // 1. Filtar segun param de name
 
-  //console.log(params);
-  //console.log(req.params);
-  console.log("Esta ruta me traeria el producto:", producto); // Tambien se puede => Number (producto)
-  //console.log("Esta ruta me traeria la categoria:", category);
-  res.send("Coca-cola Light!!");
+  try {
+    let id = Number (req.params.id); // => Number (req.params.producto)
+  
+    let productFound = marketProducts.find((car) => car.id === id)
+    
+    res.status(220).json(productFound)
+  } catch (error) {
+    res.status(400).json("Error en la busqueda")
+  }
+  //res.send("Coca-cola Light!!");
 });
 
-
+// CREAR UN PRODUCTO CON DATOS POR BODY
 server.post('/product', (req, res) => {
-  console.log("Entrada a la ruta POST");
-  res.send("Hello POST!!");
+
+  try {
+    let newProduct = req.body;
+  
+    console.log(newProduct);
+    res.send("Hello POST!!");
+  } catch (error) {
+    res.status(440).send("Error en la ruta POST")
+  }
 });
 
 server.patch('/product', (req, res) => {
