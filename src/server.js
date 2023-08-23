@@ -1,13 +1,13 @@
-const express = require('express'); 
+const express = require("express"); 
+const cors = require("cors");
 const bodyParser = require("body-parser");
 const routes = require("./routes/index.routes");
 const server = express(); 
-const cors = require("cors");
 
 /* ----------------------------MIDDLEWARES------------------------*/
 /* ------------ Midedleware para haceptar jsons-------------------*/
-server.use(bodyParser.urlencoded({ extended: true, limit: "50mb"}));
-server.use(bodyParser.json({limit: "50mb" }));
+server.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
+server.use(bodyParser.json({ limit: "50mb" }));
 /* -------------------------------CORS---------------------------*/
 server.use(cors());
 /* ------------------------------RUTAS---------------------------*/

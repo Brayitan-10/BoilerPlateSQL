@@ -1,13 +1,13 @@
 const { Sequelize } = require("sequelize");
-const ProductModel = require("./models/product");
-const CategoryModel = require("./models/category")
+const ProductModel = require("./models/Product");
+const CategoryModel = require("./models/Category");
 // ⚠ IMPORTO LA FUNCION DEL MODELO PARA SINCRONIZAR Y EVITAR MULTIPLES NEW SEQUELIZE EN CADA AR
 
 // VARIABLES DE ENTORNO
 const USER_DB = "postgres";
 const PASS_DB = "Sarah-Jade Bleau";
 const HOST_DB = "localhost";
-const PORT_DB = 5432;
+const PORT_DB = "5432";
 const NAME_DB = "carStore";
 
 // INICIO UNA INSTANCIA DE SEQUELIZE Y CONECTO CON LA BASE DE DATOS
@@ -28,8 +28,9 @@ console.log(sequelize.models);
 // Hacemos un destructuring y podemos hacer las relaciones
 const { Product, Category } = sequelize.models;
 // Relaciones con respecto a las tablas
-
-
+// Relacion uno a muchos donde A = Category
+Category.hasMany(Product)
+Product.belongsTo(Category)
 
 // EXPORTO SEQUELIZE
-module.exports = {sequelize, ...sequelize.models};
+module.exports = { sequelize, ...sequelize.models };
