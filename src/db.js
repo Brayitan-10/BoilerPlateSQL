@@ -5,7 +5,7 @@ const CategoryModel = require("./models/Category");
 
 // VARIABLES DE ENTORNO
 const USER_DB = "postgres";
-const PASS_DB = "Sarah-Jade Bleau";
+const PASS_DB = "1234";
 const HOST_DB = "localhost";
 const PORT_DB = "5432";
 const NAME_DB = "carStore";
